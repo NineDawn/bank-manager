@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.practice.mrj.bankmanager.mapper.AccountMapper">
+
+    <resultMap id="AccountMap" type="org.practice.mrj.bankmanager.domain.entity.AccountDO">
+        <id property="id" jdbcType="BIGINT" column="id"/>
+        <result property="username" jdbcType="VARCHAR" column="username"/>
+        <result property="identify" jdbcType="VARCHAR" column="identify"/>
+        <result property="mobile" jdbcType="VARCHAR" column="mobile"/>
+        <result property="address" jdbcType="VARCHAR" column="address"/>
+        <result property="cardId" jdbcType="VARCHAR" column="card_id"/>
+        <result property="accountBalance" jdbcType="DECIMAL" column="account_balance"/>
+        <result property="password" jdbcType="VARCHAR" column="password"/>
+        <result property="type" jdbcType="VARCHAR" column="type"/>
+        <result property="creditLimit" jdbcType="DECIMAL" column="credit_limit"/>
+        <result property="effectiveDate" jdbcType="DATE" column="effective_date"/>
+        <result property="gmtCreate" jdbcType="TIMESTAMP" column="gmt_create"/>
+        <result property="gmtModified" jdbcType="TIMESTAMP" column="gmt_modified"/>
+    </resultMap>
+
+    <sql id="all_columns">
+        id,username,identify,mobile,address,card_id,account_balance,password,type,credit_limit,
+        effective_date,gmt_create,gmt_modified
+    </sql>
+
+    <insert id="insertAccount" parameterType="org.practice.mrj.bankmanager.domain.entity.AccountDO">
+        insert into account
+        (username,identify,mobile,address,card_id,account_balance,password,type,credit_limit
+        ,effective_date)
+        values
+        (#{username},#{identify},#{mobile},#{address},#{cardId},#{accountBalance},#{password},#{type}
+        ,#{creditLimit},#{effectiveDate})
+    </insert>
+
+    <select id="getAccountByCardIdAndPassword" resultMap="AccountMap">
+        select
+        <include refid="all_columns"/>
+        from account
+        where
+        card_id = #{cardId}
+        and password = #{password}
+    </select>
+
+</mapper>
