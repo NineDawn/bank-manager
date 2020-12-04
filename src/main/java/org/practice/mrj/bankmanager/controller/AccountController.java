@@ -1,5 +1,6 @@
 package org.practice.mrj.bankmanager.controller;
 
+import org.practice.mrj.bankmanager.common.constant.CommonConstant;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.param.LoginParam;
 import org.practice.mrj.bankmanager.domain.vo.AccountVO;
@@ -37,7 +38,7 @@ public class AccountController {
 
         AccountDTO account = accountService.getAccountByCardIdAndPassword(loginParam);
 
-        session.setAttribute("accountInfo",account);
+        session.setAttribute(CommonConstant.ACCOUNT_SESSION_KEY,account);
         session.setMaxInactiveInterval(7200);
         AccountVO accountVO = new AccountVO();
         accountVO.setId(account.getId());
