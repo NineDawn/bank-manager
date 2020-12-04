@@ -8,10 +8,7 @@ import org.practice.mrj.bankmanager.response.Response;
 import org.practice.mrj.bankmanager.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -32,7 +29,7 @@ public class AccountController {
     private AccountService accountService;
 
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public Response login(@RequestBody @Valid LoginParam loginParam, HttpSession session){
 
@@ -47,5 +44,15 @@ public class AccountController {
         accountVO.setUsername(account.getUsername());
         return Response.success(accountVO);
     }
+
+    @RequestMapping(value = "/getNewCard",method = RequestMethod.GET)
+    @ResponseBody
+    public Response getNewCard(){
+
+        AccountVO newCard = accountService.getNewCard();
+        return Response.success(newCard);
+    }
+
+
 
 }

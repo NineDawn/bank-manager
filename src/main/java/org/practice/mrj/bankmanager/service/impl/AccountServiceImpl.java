@@ -1,5 +1,6 @@
 package org.practice.mrj.bankmanager.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.crypto.SecureUtil;
 import org.practice.mrj.bankmanager.common.enums.ErrorCodeEnums;
 import org.practice.mrj.bankmanager.common.exception.BankException;
@@ -8,6 +9,7 @@ import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.entity.AccountDO;
 import org.practice.mrj.bankmanager.domain.mapper.AccountEntityMapper;
 import org.practice.mrj.bankmanager.domain.param.LoginParam;
+import org.practice.mrj.bankmanager.domain.vo.AccountVO;
 import org.practice.mrj.bankmanager.mapper.AccountMapper;
 import org.practice.mrj.bankmanager.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,13 @@ public class AccountServiceImpl implements AccountService {
     private AccountMapper accountMapper;
 
     @Override
-    public String getNewCardId() {
-        return CardIdGeneratorUtil.getCardId();
+    public AccountVO getNewCard() {
+
+        return AccountVO.builder()
+                .cardId(CardIdGeneratorUtil.getCardId())
+                .effectiveDate(DateUtil.offsetMonth(new Date(),240).toJdkDate())
+                .creditLimit(10000.0)
+                .build();
     }
 
     @Override

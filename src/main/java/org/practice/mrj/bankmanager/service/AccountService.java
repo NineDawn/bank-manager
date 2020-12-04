@@ -2,6 +2,7 @@ package org.practice.mrj.bankmanager.service;
 
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.param.LoginParam;
+import org.practice.mrj.bankmanager.domain.vo.AccountVO;
 
 /**
  * InterfaceName: AccountService
@@ -14,7 +15,7 @@ import org.practice.mrj.bankmanager.domain.param.LoginParam;
 public interface AccountService {
 
 
-    String getNewCardId();
+    AccountVO getNewCard();
 
     void addAccount(AccountDTO accountDTO);
 
