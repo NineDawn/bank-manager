@@ -1,6 +1,7 @@
 package org.practice.mrj.bankmanager.domain.param;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * ClassName: AccountParam
@@ -13,52 +14,62 @@ import lombok.Data;
 @Data
 public class AccountParam {
 
+    @NotBlank
     private Long id;
 
     /**
      * 姓名
      */
+    @NotBlank
     private String username;
 
     /**
      * 身份证号
      */
+    @NotBlank
     private String identify;
 
     /**
      * 手机号
      */
+    @NotBlank
     private String mobile;
 
     /**
      * 地址
      */
+    @NotBlank
     private String address;
 
     /**
      * 卡号
      */
+    @NotBlank
     private String cardId;
 
 
     /**
      * 密码
      */
+    @NotBlank
     private String password;
 
     /**
      * 类型
      */
+    @NotBlank
     private String type;
 
     /**
      * 透支额度
      */
+    @NotBlank
     private Double creditLimit;
 
     /**
      * 有效期
      */
+    @NotBlank
     private String effectiveDate;
 
 }

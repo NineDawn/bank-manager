@@ -1,13 +1,15 @@
 package org.practice.mrj.bankmanager.controller;
 
+import cn.hutool.core.date.DateUtil;
 import org.practice.mrj.bankmanager.common.constant.CommonConstant;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
+import org.practice.mrj.bankmanager.domain.mapper.AccountEntityMapper;
+import org.practice.mrj.bankmanager.domain.param.AccountParam;
 import org.practice.mrj.bankmanager.domain.param.LoginParam;
 import org.practice.mrj.bankmanager.domain.vo.AccountVO;
 import org.practice.mrj.bankmanager.response.Response;
 import org.practice.mrj.bankmanager.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -53,6 +55,14 @@ public class AccountController {
         return Response.success(newCard);
     }
 
+    @RequestMapping(value = "/addAccount",method = RequestMethod.POST)
+    @ResponseBody
+    public Response addAccount(@RequestBody @Valid AccountParam accountParam){
+        AccountDTO accountDTO = AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam);
+        accountDTO.setEffectiveDate(DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate());
+        accountService.addAccount(accountDTO);
+        return Response.success();
+    }
 
 
 }
