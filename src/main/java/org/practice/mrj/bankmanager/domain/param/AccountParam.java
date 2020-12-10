@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class AccountParam {
 
-    @NotBlank
     private Long id;
 
     /**
