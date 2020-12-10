@@ -34,9 +34,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountVO getNewCard() {
 
+        Date effectiveDate = DateUtil.offsetMonth(new Date(),240).toJdkDate();
+
         return AccountVO.builder()
                 .cardId(CardIdGeneratorUtil.getCardId())
-                .effectiveDate(DateUtil.offsetMonth(new Date(),240).toJdkDate())
+                .effectiveDate(DateUtil.format(effectiveDate,"yyyy-MM-dd"))
                 .creditLimit(10000.0)
                 .build();
     }
