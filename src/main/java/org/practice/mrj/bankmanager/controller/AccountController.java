@@ -62,14 +62,14 @@ public class AccountController {
         AccountDTO accountDTO = AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam);
         accountDTO.setAccountBalance(0.0);
         accountService.addAccount(accountDTO);
-        return Response.success();
+        return Response.success(true);
     }
 
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     @ResponseBody
     public Response logout(HttpSession session){
         session.removeAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
-        return Response.success();
+        return Response.success(true);
     }
 
 
