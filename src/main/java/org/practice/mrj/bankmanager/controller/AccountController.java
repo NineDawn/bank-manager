@@ -60,6 +60,7 @@ public class AccountController {
     @ResponseBody
     public Response addAccount(@RequestBody @Valid AccountParam accountParam){
         AccountDTO accountDTO = AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam);
+        accountDTO.setAccountBalance(0.0);
         accountService.addAccount(accountDTO);
         return Response.success();
     }
