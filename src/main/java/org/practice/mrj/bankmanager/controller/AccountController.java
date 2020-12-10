@@ -1,6 +1,7 @@
 package org.practice.mrj.bankmanager.controller;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.http.HttpUtil;
 import org.practice.mrj.bankmanager.common.constant.CommonConstant;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.mapper.AccountEntityMapper;
@@ -61,6 +62,13 @@ public class AccountController {
         AccountDTO accountDTO = AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam);
         accountDTO.setEffectiveDate(DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate());
         accountService.addAccount(accountDTO);
+        return Response.success();
+    }
+
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    @ResponseBody
+    public Response logout(HttpSession session){
+        session.removeAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
         return Response.success();
     }
 
