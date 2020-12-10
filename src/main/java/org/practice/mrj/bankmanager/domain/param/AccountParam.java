@@ -3,6 +3,8 @@ package org.practice.mrj.bankmanager.domain.param;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * ClassName: AccountParam
  * Description:
@@ -63,7 +65,7 @@ public class AccountParam {
     /**
      * 透支额度
      */
-    @NotBlank
+    @NotNull
     private Double creditLimit;
 
     /**
