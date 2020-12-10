@@ -60,7 +60,6 @@ public class AccountController {
     @ResponseBody
     public Response addAccount(@RequestBody @Valid AccountParam accountParam){
         AccountDTO accountDTO = AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam);
-        accountDTO.setEffectiveDate(DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate());
         accountService.addAccount(accountDTO);
         return Response.success();
     }

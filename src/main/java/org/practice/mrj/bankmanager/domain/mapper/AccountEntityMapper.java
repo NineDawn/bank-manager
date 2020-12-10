@@ -2,11 +2,13 @@ package org.practice.mrj.bankmanager.domain.mapper;
 
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.entity.AccountDO;
 import org.practice.mrj.bankmanager.domain.param.AccountParam;
 import org.practice.mrj.bankmanager.domain.vo.AccountVO;
+import cn.hutool.core.date.DateUtil;
 
 /**
  * InterfaceName: AccountEntityMapper
@@ -16,7 +18,7 @@ import org.practice.mrj.bankmanager.domain.vo.AccountVO;
  * @Date: 2020/11/28 19:09
  * @Version: 1.0
  */
-@Mapper
+@Mapper(imports = DateUtil.class)
 public interface AccountEntityMapper {
 
     AccountEntityMapper INSTANCE = Mappers.getMapper(AccountEntityMapper.class);
@@ -27,6 +29,7 @@ public interface AccountEntityMapper {
 
     AccountVO accountDto2Vo(AccountDTO accountDTO);
 
+    @Mapping(target = "effectiveDate",expression = "java(DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate())")
     AccountDTO accountParam2Dto(AccountParam accountParam);
 
 }
