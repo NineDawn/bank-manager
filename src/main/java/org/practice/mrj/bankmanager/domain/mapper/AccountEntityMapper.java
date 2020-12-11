@@ -29,7 +29,9 @@ public interface AccountEntityMapper {
 
     AccountVO accountDto2Vo(AccountDTO accountDTO);
 
-    @Mapping(target = "effectiveDate",expression = "java(DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate())")
+    @Mapping(target = "effectiveDate",expression = "java(" +
+            "accountParam.getEffectiveDate()==null?null:DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate()" +
+            ")")
     AccountDTO accountParam2Dto(AccountParam accountParam);
 
 }
