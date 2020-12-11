@@ -1,5 +1,10 @@
 package org.practice.mrj.bankmanager.mapper;
 
+import org.practice.mrj.bankmanager.domain.entity.BillDO;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * InterfaceName: BillMapper
  * Description:
@@ -10,6 +15,6 @@ package org.practice.mrj.bankmanager.mapper;
  */
 public interface BillMapper {
 
-
+    List<BillDO> queryBills(Map<String,Object> params);
 
 }

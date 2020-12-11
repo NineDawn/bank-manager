@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * ClassName: AccountParam
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @Version: 1.0
  */
 @Data
-public class AccountParam {
+public class AccountParam implements Serializable {
 
     private Long id;
 
@@ -72,5 +73,10 @@ public class AccountParam {
      */
     @NotBlank
     private String effectiveDate;
+
+    /**
+     * 存取款数
+     */
+    private Integer amount;
 
 }

@@ -1,7 +1,10 @@
 package org.practice.mrj.bankmanager.service.impl;
 
+import org.practice.mrj.bankmanager.domain.dto.BillDTO;
 import org.practice.mrj.bankmanager.service.BillService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * ClassName: BillServiceImpl
@@ -13,4 +16,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BillServiceImpl implements BillService {
+    @Override
+    public List<BillDTO> queryBills(String cardId) {
+        return null;
+    }
 }

@@ -2,6 +2,7 @@ package org.practice.mrj.bankmanager.domain.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Version: 1.0
  */
 @Data
-public class AccountDTO {
+public class AccountDTO implements Serializable {
 
     private Long id;
 
@@ -66,5 +67,10 @@ public class AccountDTO {
      * 有效期
      */
     private Date effectiveDate;
+
+    /**
+     * 存取款数
+     */
+    private Integer amount;
 
 }

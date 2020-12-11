@@ -1,7 +1,5 @@
 package org.practice.mrj.bankmanager.controller;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.http.HttpUtil;
 import org.practice.mrj.bankmanager.common.constant.CommonConstant;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.mapper.AccountEntityMapper;
@@ -72,5 +70,41 @@ public class AccountController {
         return Response.success(true);
     }
 
+    @RequestMapping(value = "/getAccountBalance",method = RequestMethod.GET)
+    @ResponseBody
+    public Response getAccountBalance(HttpSession session){
+
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        AccountDTO res = accountService.getAccountBalance(accountDTO.getId());
+        return Response.success(AccountEntityMapper.INSTANCE.accountDto2Vo(res));
+    }
+
+
+    @RequestMapping(value = "/withdraw",method = RequestMethod.POST)
+    @ResponseBody
+    public Response withdraw(@RequestBody AccountParam accountParam,HttpSession session){
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountParam.setId(accountDTO.getId());
+        accountService.withdraw(AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam));
+        return Response.success(true);
+    }
+
+    @RequestMapping(value = "/deposit",method = RequestMethod.POST)
+    @ResponseBody
+    public Response deposit(@RequestBody AccountParam accountParam,HttpSession session){
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountParam.setId(accountDTO.getId());
+        accountService.deposit(AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam));
+        return Response.success(true);
+    }
+
+    @RequestMapping(value = "/transfer",method = RequestMethod.POST)
+    @ResponseBody
+    public Response transfer(@RequestBody AccountParam accountParam,HttpSession session){
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountParam.setId(accountDTO.getId());
+        accountService.transfer(AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam));
+        return Response.success(true);
+    }
 
 }
