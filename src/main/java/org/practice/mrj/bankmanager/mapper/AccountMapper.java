@@ -1,5 +1,6 @@
 package org.practice.mrj.bankmanager.mapper;
 
+import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.entity.AccountDO;
 import org.practice.mrj.bankmanager.domain.param.LoginParam;
 
@@ -45,5 +46,12 @@ public interface AccountMapper {
      * @return 用户内容
      */
     AccountDO getAccountByCardId(String cardId);
+
+    /**
+     * 根据用户id获取用户信息
+     * @param id 用户id
+     * @return 用户信息
+     */
+    AccountDO getAccountById(Long id);
 
 }

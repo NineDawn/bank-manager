@@ -15,6 +15,17 @@ import java.util.Map;
  */
 public interface BillMapper {
 
-    List<BillDO> queryBills(Map<String,Object> params);
+    /**
+     * 查询账单信息
+     * @param cardId 卡号
+     * @return
+     */
+    List<BillDO> queryBills(String cardId);
+
+    /**
+     * 插入账单
+     * @param billDO 账单内容
+     */
+    void insertBill(BillDO billDO);
 
 }

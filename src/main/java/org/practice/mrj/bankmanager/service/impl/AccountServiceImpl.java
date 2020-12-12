@@ -2,15 +2,19 @@ package org.practice.mrj.bankmanager.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.crypto.SecureUtil;
+import org.practice.mrj.bankmanager.common.constant.CommonConstant;
+import org.practice.mrj.bankmanager.common.enums.CardTypeEnums;
 import org.practice.mrj.bankmanager.common.enums.ErrorCodeEnums;
 import org.practice.mrj.bankmanager.common.exception.BankException;
 import org.practice.mrj.bankmanager.common.util.CardIdGeneratorUtil;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.entity.AccountDO;
+import org.practice.mrj.bankmanager.domain.entity.BillDO;
 import org.practice.mrj.bankmanager.domain.mapper.AccountEntityMapper;
 import org.practice.mrj.bankmanager.domain.param.LoginParam;
 import org.practice.mrj.bankmanager.domain.vo.AccountVO;
 import org.practice.mrj.bankmanager.mapper.AccountMapper;
+import org.practice.mrj.bankmanager.mapper.BillMapper;
 import org.practice.mrj.bankmanager.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountMapper accountMapper;
+
+    @Autowired
+    private BillMapper billMapper;
 
     @Override
     public AccountVO getNewCard() {
@@ -79,33 +86,59 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(rollbackFor = {Error.class,Exception.class},isolation = Isolation.DEFAULT)
     public void withdraw(AccountDTO accountDTO) {
-        Double balance = getAccountBalance(accountDTO.getId()).getAccountBalance();
-        if (balance-accountDTO.getAmount()<0){
-            throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
+        AccountDO account = accountMapper.getAccountById(accountDTO.getId());
+        String type = account.getType();
+        Double balance = account.getAccountBalance();
+        if (type.equals(CardTypeEnums.CREDIT_CARD.getDesc())){
+            if (balance-accountDTO.getAmount()<(0-account.getCreditLimit())){
+                throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
+            }
+        }else {
+            if (balance-accountDTO.getAmount()<0){
+                throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
+            }
         }
         AccountDO accountDO = new AccountDO();
         accountDO.setId(accountDTO.getId());
         accountDO.setAccountBalance(balance-accountDTO.getAmount());
         accountMapper.updateAccountBalance(accountDO);
+
+        BillDO billDO = generateBill(CommonConstant.WITHDRAW,accountDTO.getAmount(), account.getCardId());
+        billMapper.insertBill(billDO);
+
     }
 
     @Override
     @Transactional(rollbackFor = {Error.class,Exception.class},isolation = Isolation.DEFAULT)
     public void deposit(AccountDTO accountDTO) {
-        Double balance = getAccountBalance(accountDTO.getId()).getAccountBalance();
+        AccountDO account = accountMapper.getAccountById(accountDTO.getId());
+        Double balance = account.getAccountBalance();
         AccountDO accountDO = AccountDO.builder()
                 .id(accountDTO.getId())
                 .accountBalance(balance + accountDTO.getAmount())
                 .build();
         accountMapper.updateAccountBalance(accountDO);
+
+        BillDO billDO = generateBill(CommonConstant.DEPOSIT,accountDTO.getAmount(), account.getCardId());
+        billMapper.insertBill(billDO);
     }
 
     @Override
     @Transactional(rollbackFor = {Error.class,Exception.class},isolation = Isolation.DEFAULT)
     public void transfer(AccountDTO accountDTO) {
-        Double sourceBalance = getAccountBalance(accountDTO.getId()).getAccountBalance();
-        if (sourceBalance - accountDTO.getAmount()<0){
-            throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
+
+        AccountDO sourceAccount = accountMapper.getAccountById(accountDTO.getId());
+        String type = sourceAccount.getType();
+        Double sourceBalance = sourceAccount.getAccountBalance();
+        if (type.equals(CardTypeEnums.CREDIT_CARD.getDesc())){
+            if (sourceBalance-accountDTO.getAmount()<(0-sourceAccount.getCreditLimit())){
+                throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
+            }
+        }
+        else if (type.equals(CardTypeEnums.DEBIT_CARD.getDesc())){
+            if (sourceBalance-accountDTO.getAmount()<0){
+                throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
+            }
         }
         AccountDO targetAccountDO = accountMapper.getAccountByCardId(accountDTO.getCardId());
         if (targetAccountDO == null){
@@ -117,6 +150,21 @@ public class AccountServiceImpl implements AccountService {
         sourceAccountDO.setAccountBalance(sourceBalance - accountDTO.getAmount());
         sourceAccountDO.setId(accountDTO.getId());
         accountMapper.updateAccountBalance(sourceAccountDO);
+
+        BillDO billDO = generateBill(CommonConstant.TRANSFER,accountDTO.getAmount(), sourceAccount.getCardId());
+        billMapper.insertBill(billDO);
+
+    }
+
+
+    private BillDO generateBill(String affairType,Double tradeBalance,String cardId){
+
+        return BillDO.builder()
+                .affairType(affairType)
+                .cardId(cardId)
+                .tradeBalance(tradeBalance)
+                .tradeTime(new Date())
+                .build();
     }
 
 

@@ -15,14 +15,20 @@
     <sql id="all_columns">
         id,affair_type,trade_balance,trade_time,card_id
     </sql>
+    <insert id="insertBill">
+        insert into bill
+        (affair_type,trade_balance,trade_time,card_id)
+        values
+        (#{affairType},#{tradeBalance},#{tradeTime},#{cardId})
+    </insert>
 
-    <select id="queryBills" resultType="org.practice.mrj.bankmanager.domain.entity.BillDO">
+    <select id="queryBills" resultMap="BillMap">
         select
             <include refid="all_columns"/>
         from
              bill
         where
-            cardId = #{cardId}
+            card_id = #{cardId}
         order by trade_time desc
         limit 10
     </select>

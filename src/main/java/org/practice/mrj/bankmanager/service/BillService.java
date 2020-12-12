@@ -15,7 +15,7 @@ import java.util.List;
 public interface BillService {
 
 
-    List<BillDTO> queryBills(String cardId);
+    List<BillDTO> queryBills(Long id);
 
 
 

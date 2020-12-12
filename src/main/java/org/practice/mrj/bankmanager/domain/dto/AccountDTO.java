@@ -71,6 +71,6 @@ public class AccountDTO implements Serializable {
     /**
      * 存取款数
      */
-    private Integer amount;
+    private Double amount;
 
 }

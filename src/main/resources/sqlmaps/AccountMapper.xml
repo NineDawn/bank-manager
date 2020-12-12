@@ -66,4 +66,11 @@
         limit 1
     </select>
 
+    <select id="getAccountById" resultMap="AccountMap">
+        select
+            <include refid="all_columns"/>
+        from account
+        where id = #{id}
+    </select>
+
 </mapper>
