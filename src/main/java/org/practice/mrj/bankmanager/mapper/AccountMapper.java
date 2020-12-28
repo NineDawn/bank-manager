@@ -54,4 +54,7 @@ public interface AccountMapper {
      */
     AccountDO getAccountById(Long id);
 
+
+    void changePassword(Long id,String newPassword);
+
 }

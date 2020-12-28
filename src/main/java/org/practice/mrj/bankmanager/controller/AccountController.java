@@ -63,6 +63,18 @@ public class AccountController {
         return Response.success(true);
     }
 
+    @RequestMapping(value = "/resetPassword",method = RequestMethod.POST)
+    @ResponseBody
+    public Response resetPassword(@RequestBody AccountParam accountParam,HttpSession session){
+
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountService.changePassword(accountDTO.getId(),accountParam.getNewPassword());
+        session.removeAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        return Response.success(true);
+
+    }
+
+
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     @ResponseBody
     public Response logout(HttpSession session){

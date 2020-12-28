@@ -43,6 +43,6 @@ public interface AccountService {
 
     void transfer(AccountDTO accountDTO);
 
-
+    void changePassword(Long id,String newPassword);
 
 }

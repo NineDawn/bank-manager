@@ -127,6 +127,10 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = {Error.class,Exception.class},isolation = Isolation.DEFAULT)
     public void transfer(AccountDTO accountDTO) {
 
+        AccountDO targetAccountDO = accountMapper.getAccountByCardId(accountDTO.getCardId());
+        if (targetAccountDO == null){
+            throw new BankException(ErrorCodeEnums.CARD_ID_NOT_EXIST);
+        }
         AccountDO sourceAccount = accountMapper.getAccountById(accountDTO.getId());
         String type = sourceAccount.getType();
         Double sourceBalance = sourceAccount.getAccountBalance();
@@ -140,10 +144,6 @@ public class AccountServiceImpl implements AccountService {
                 throw new BankException(ErrorCodeEnums.BALANCE_NOT_ENOUGH);
             }
         }
-        AccountDO targetAccountDO = accountMapper.getAccountByCardId(accountDTO.getCardId());
-        if (targetAccountDO == null){
-            throw new BankException(ErrorCodeEnums.CARD_ID_NOT_EXIST);
-        }
         targetAccountDO.setAccountBalance(targetAccountDO.getAccountBalance() + accountDTO.getAmount());
         accountMapper.updateAccountBalance(targetAccountDO);
         AccountDO sourceAccountDO = new AccountDO();
@@ -154,6 +154,11 @@ public class AccountServiceImpl implements AccountService {
         BillDO billDO = generateBill(CommonConstant.TRANSFER,accountDTO.getAmount(), sourceAccount.getCardId());
         billMapper.insertBill(billDO);
 
+    }
+
+    @Override
+    public void changePassword(Long id, String newPassword) {
+        accountMapper.changePassword(id,SecureUtil.md5(newPassword));
     }
 
 

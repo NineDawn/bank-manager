@@ -39,6 +39,13 @@
         where
         id = #{id}
     </update>
+    <update id="changePassword">
+        update account
+        set
+            password = #{newPassword}
+        where
+        id = #{id}
+    </update>
 
     <select id="getAccountByCardIdAndPassword" resultMap="AccountMap">
         select

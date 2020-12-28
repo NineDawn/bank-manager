@@ -57,6 +57,11 @@ public class AccountParam implements Serializable {
     private String password;
 
     /**
+     * 新密码
+     */
+    private String newPassword;
+
+    /**
      * 类型
      */
     @NotBlank
