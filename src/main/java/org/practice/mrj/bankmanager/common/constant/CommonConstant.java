@@ -18,6 +18,8 @@ public class CommonConstant {
 
     public static final String TRANSFER = "转账";
 
+    public static final String RECEIVE_PAYMENT = "收款";
+
     public static final Integer BILL_LIST_SIZE = 10;
 
 }

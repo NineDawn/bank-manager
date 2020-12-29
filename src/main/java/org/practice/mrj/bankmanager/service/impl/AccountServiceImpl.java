@@ -152,8 +152,9 @@ public class AccountServiceImpl implements AccountService {
         accountMapper.updateAccountBalance(sourceAccountDO);
 
         BillDO billDO = generateBill(CommonConstant.TRANSFER,accountDTO.getAmount(), sourceAccount.getCardId());
+        BillDO targetBillDO = generateBill(CommonConstant.RECEIVE_PAYMENT,accountDTO.getAmount(),targetAccountDO.getCardId());
         billMapper.insertBill(billDO);
-
+        billMapper.insertBill(targetBillDO);
     }
 
     @Override
