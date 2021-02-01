@@ -3,6 +3,9 @@ package org.practice.mrj.bankmanager.domain.param;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
 /**
  * ClassName: AccountParam
  * Description:
@@ -12,9 +15,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @Version: 1.0
  */
 @Data
-public class AccountParam {
+public class AccountParam implements Serializable {
 
-    @NotBlank
     private Long id;
 
     /**
@@ -55,6 +57,11 @@ public class AccountParam {
     private String password;
 
     /**
+     * 新密码
+     */
+    private String newPassword;
+
+    /**
      * 类型
      */
     @NotBlank
@@ -63,7 +70,7 @@ public class AccountParam {
     /**
      * 透支额度
      */
-    @NotBlank
+    @NotNull
     private Double creditLimit;
 
     /**
@@ -71,5 +78,10 @@ public class AccountParam {
      */
     @NotBlank
     private String effectiveDate;
+
+    /**
+     * 存取款数
+     */
+    private Double amount;
 
 }

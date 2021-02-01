@@ -1,5 +1,9 @@
 package org.practice.mrj.bankmanager.service;
 
+import org.practice.mrj.bankmanager.domain.dto.BillDTO;
+
+import java.util.List;
+
 /**
  * InterfaceName: BillService
  * Description:
@@ -9,4 +13,10 @@ package org.practice.mrj.bankmanager.service;
  * @Version: 1.0
  */
 public interface BillService {
+
+
+    List<BillDTO> queryBills(Long id);
+
+
+
 }

@@ -40,8 +40,14 @@ public enum ErrorCodeEnums implements IexceptionCode {
      * 已过期
      */
     CARD_EXPIRED(1005,"银行卡已过期!"),
-
+    /**
+     * 用户未登录
+     */
     USER_NOT_LOGIN(10000,"用户未登录!"),
+
+    BALANCE_NOT_ENOUGH(1006,"余额不足!"),
+
+    CARD_ID_NOT_EXIST(1007,"卡号不存在!"),
     ;
 
     private int code;

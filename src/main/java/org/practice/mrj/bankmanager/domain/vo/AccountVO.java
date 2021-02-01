@@ -71,6 +71,6 @@ public class AccountVO {
     /**
      * 有效期
      */
-    private Date effectiveDate;
+    private String effectiveDate;
 
 }

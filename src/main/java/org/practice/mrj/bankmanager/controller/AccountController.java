@@ -1,7 +1,5 @@
 package org.practice.mrj.bankmanager.controller;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.http.HttpUtil;
 import org.practice.mrj.bankmanager.common.constant.CommonConstant;
 import org.practice.mrj.bankmanager.domain.dto.AccountDTO;
 import org.practice.mrj.bankmanager.domain.mapper.AccountEntityMapper;
@@ -60,17 +58,65 @@ public class AccountController {
     @ResponseBody
     public Response addAccount(@RequestBody @Valid AccountParam accountParam){
         AccountDTO accountDTO = AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam);
-        accountDTO.setEffectiveDate(DateUtil.parse(accountParam.getEffectiveDate()).toJdkDate());
+        accountDTO.setAccountBalance(0.0);
         accountService.addAccount(accountDTO);
-        return Response.success();
+        return Response.success(true);
     }
+
+    @RequestMapping(value = "/resetPassword",method = RequestMethod.POST)
+    @ResponseBody
+    public Response resetPassword(@RequestBody AccountParam accountParam,HttpSession session){
+
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountService.changePassword(accountDTO.getId(),accountParam.getNewPassword());
+        session.removeAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        return Response.success(true);
+
+    }
+
 
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     @ResponseBody
     public Response logout(HttpSession session){
         session.removeAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
-        return Response.success();
+        return Response.success(true);
     }
 
+    @RequestMapping(value = "/getAccountBalance",method = RequestMethod.GET)
+    @ResponseBody
+    public Response getAccountBalance(HttpSession session){
+
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        AccountDTO res = accountService.getAccountBalance(accountDTO.getId());
+        return Response.success(AccountEntityMapper.INSTANCE.accountDto2Vo(res));
+    }
+
+
+    @RequestMapping(value = "/withdraw",method = RequestMethod.POST)
+    @ResponseBody
+    public Response withdraw(@RequestBody AccountParam accountParam,HttpSession session){
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountParam.setId(accountDTO.getId());
+        accountService.withdraw(AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam));
+        return Response.success(true);
+    }
+
+    @RequestMapping(value = "/deposit",method = RequestMethod.POST)
+    @ResponseBody
+    public Response deposit(@RequestBody AccountParam accountParam,HttpSession session){
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountParam.setId(accountDTO.getId());
+        accountService.deposit(AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam));
+        return Response.success(true);
+    }
+
+    @RequestMapping(value = "/transfer",method = RequestMethod.POST)
+    @ResponseBody
+    public Response transfer(@RequestBody AccountParam accountParam,HttpSession session){
+        AccountDTO accountDTO = (AccountDTO) session.getAttribute(CommonConstant.ACCOUNT_SESSION_KEY);
+        accountParam.setId(accountDTO.getId());
+        accountService.transfer(AccountEntityMapper.INSTANCE.accountParam2Dto(accountParam));
+        return Response.success(true);
+    }
 
 }

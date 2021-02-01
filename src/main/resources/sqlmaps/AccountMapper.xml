@@ -32,6 +32,21 @@
         ,#{creditLimit},#{effectiveDate})
     </insert>
 
+    <update id="updateAccountBalance">
+        update account
+        set
+            account_balance = #{accountBalance}
+        where
+        id = #{id}
+    </update>
+    <update id="changePassword">
+        update account
+        set
+            password = #{newPassword}
+        where
+        id = #{id}
+    </update>
+
     <select id="getAccountByCardIdAndPassword" resultMap="AccountMap">
         select
         <include refid="all_columns"/>
@@ -39,6 +54,30 @@
         where
         card_id = #{cardId}
         and password = #{password}
+    </select>
+
+    <select id="getAccountBalance" resultMap="AccountMap">
+        select account_balance,credit_limit
+        from account
+        where
+        id = #{id}
+        limit 1
+    </select>
+
+    <select id="getAccountByCardId" resultMap="AccountMap">
+        select
+            <include refid="all_columns"/>
+        from account
+        where
+            card_id = #{cardId}
+        limit 1
+    </select>
+
+    <select id="getAccountById" resultMap="AccountMap">
+        select
+            <include refid="all_columns"/>
+        from account
+        where id = #{id}
     </select>
 
 </mapper>
